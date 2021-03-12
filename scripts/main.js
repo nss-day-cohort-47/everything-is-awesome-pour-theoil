@@ -59,7 +59,7 @@ navElement.addEventListener("click", (event) => {
 	}
 })
 
-navElement.addEventListener("click", (event) => {
+navElement.addEventListener("keydown", (event) => {
 	
 	if (event.key === "Enter") {
 		const search = document.querySelector("input[name='postSearch']").value
