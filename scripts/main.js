@@ -12,6 +12,7 @@ navElement.addEventListener("click", (event) => {
 	}
 })
 
+
 navElement.addEventListener("click", (event) => {
 	if (event.target.id === "showGreen") {
 		filterLegos("Green")
@@ -37,6 +38,12 @@ const filterLegosMaterial = (whatFilter) => {
 	})
 	makeLegoList(filterArray);
 }
+
+navElement.addEventListener("click", (event) => {
+	if (event.target.id === "sort") {
+		filterLegoManufacture()
+	}
+})
 
 const filterLegos = (whatFilter) => {
 	const filterArray = useLegos().filter(singleLego => {
@@ -73,7 +80,7 @@ navElement.addEventListener("keydown", (event) => {
 
 const filterLegoId = (whatFilter) => {
 	const filterArray = useLegos().filter(singleLego => {
-		if (singleLego.Id == whatFilter) {
+		if (singleLego.LegoId == whatFilter) {
 			console.log(singleLego)
 			return singleLego;
 		} 
@@ -84,6 +91,43 @@ const filterLegoId = (whatFilter) => {
 			makeLegoList(useLegos());
 		}
 
+}
+
+function compareValues(key, order = 'asc') {
+	return function innerSort(a, b) {
+	  if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+		return 0;
+	  }
+  
+	  const varA = (typeof a[key] === 'string')
+		? a[key].toUpperCase() : a[key];
+	  const varB = (typeof b[key] === 'string')
+		? b[key].toUpperCase() : b[key];
+  
+	  let comparison = 0;
+	  if (varA > varB) {
+		comparison = 1;
+	  } else if (varA < varB) {
+		comparison = -1;
+	  }
+	  return (
+		(order === 'desc') ? (comparison * -1) : comparison
+	  );
+	};
+}
+
+const filterLegoManufacture = () => {
+	const listtosort =[];
+	const nodate = useLegos().filter(singleLego => {
+			if (singleLego.YearFrom.length === 0) {
+				return singleLego;
+			}
+			else listtosort.push(singleLego);
+		})
+	const sortedlist = listtosort.sort(compareValues('YearFrom', 'desc'));
+	const alldata = sortedlist.concat(nodate)
+	const manufacture = makeLegoList(alldata);
+	return manufacture 
 }
 
 
